@@ -30,6 +30,27 @@
     .pc-desc { font-size:0.84rem; color:var(--white-muted); line-height:1.6; margin-bottom:14px; font-weight:300; }
     .pc-tags { display:flex; flex-wrap:wrap; gap:6px; }
     .pc-tag { padding:3px 10px; background:rgba(201,168,76,0.07); border:1px solid var(--border); border-radius:3px; font-size:0.7rem; color:var(--white-muted); font-family:'Space Mono',monospace; }
+    
+    /* Admin link button */
+    .admin-link {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--gold);
+      color: #0A1628;
+      padding: 12px 20px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Space Mono', monospace;
+      z-index: 100;
+      box-shadow: 0 0 15px rgba(201,168,76,0.5);
+      transition: all 0.3s;
+    }
+    .admin-link:hover {
+      transform: scale(1.05);
+      background: #e0c87a;
+    }
   </style>
 </head>
 <body>
@@ -69,42 +90,7 @@
   </div>
 
   <div class="portfolio-grid" id="portfolio-grid">
-    <div class="portfolio-card reveal" data-cat="web">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(26,51,88,0.8));">🌐</div>
-      <div class="pc-body"><div class="pc-type">Web Development</div><h3 class="pc-title">Corporate Website — TechCorp</h3><p class="pc-desc">Full corporate website with CMS, contact forms, SEO optimization, and multi-language support.</p><div class="pc-tags"><span class="pc-tag">HTML</span><span class="pc-tag">CSS</span><span class="pc-tag">JS</span><span class="pc-tag">PHP</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="erp">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(10,22,40,0.9));">⚙️</div>
-      <div class="pc-body"><div class="pc-type">ERPNext</div><h3 class="pc-title">ERPNext Full Setup — Manufacturing Co.</h3><p class="pc-desc">Complete ERPNext implementation with custom modules, workflows, and user training for manufacturing business.</p><div class="pc-tags"><span class="pc-tag">ERPNext</span><span class="pc-tag">Frappe</span><span class="pc-tag">Python</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="ecommerce">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(160,120,48,0.15),rgba(26,51,88,0.7));">🛒</div>
-      <div class="pc-body"><div class="pc-type">E-Commerce</div><h3 class="pc-title">Online Store — FashionHub</h3><p class="pc-desc">Full e-commerce platform with payment integration, inventory management, and customer portal.</p><div class="pc-tags"><span class="pc-tag">WooCommerce</span><span class="pc-tag">WordPress</span><span class="pc-tag">Payment API</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="design">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(232,200,122,0.1),rgba(10,22,40,0.9));">🎨</div>
-      <div class="pc-body"><div class="pc-type">Design</div><h3 class="pc-title">Brand Identity — StartupX</h3><p class="pc-desc">Complete brand identity including logo, color palette, typography, business cards, and brand guidelines.</p><div class="pc-tags"><span class="pc-tag">Logo</span><span class="pc-tag">Illustrator</span><span class="pc-tag">Brand Kit</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="app">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(26,51,88,0.8));">📱</div>
-      <div class="pc-body"><div class="pc-type">App Development</div><h3 class="pc-title">Inventory Manager App</h3><p class="pc-desc">Cross-platform inventory management app with barcode scanning, reports, and cloud sync.</p><div class="pc-tags"><span class="pc-tag">React</span><span class="pc-tag">Node.js</span><span class="pc-tag">MySQL</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="web">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(160,120,48,0.12),rgba(10,22,40,0.8));">💼</div>
-      <div class="pc-body"><div class="pc-type">Web Development</div><h3 class="pc-title">Portfolio Website — Agency</h3><p class="pc-desc">Animated portfolio website with custom animations, project showcase, and client testimonials.</p><div class="pc-tags"><span class="pc-tag">HTML</span><span class="pc-tag">GSAP</span><span class="pc-tag">JS</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="erp">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(17,34,64,0.9));">📊</div>
-      <div class="pc-body"><div class="pc-type">ERPNext</div><h3 class="pc-title">Custom ERP Fields — Retail Chain</h3><p class="pc-desc">Custom DocTypes, fields, and automated reports for a 5-branch retail chain on ERPNext.</p><div class="pc-tags"><span class="pc-tag">ERPNext</span><span class="pc-tag">Custom Fields</span><span class="pc-tag">Reports</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="design">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(232,200,122,0.12),rgba(10,22,40,0.85));">🖼️</div>
-      <div class="pc-body"><div class="pc-type">Social Media Design</div><h3 class="pc-title">Monthly Social Pack — Restaurant</h3><p class="pc-desc">30 social media posts per month with consistent branding, promotions, and seasonal content.</p><div class="pc-tags"><span class="pc-tag">Canva</span><span class="pc-tag">Social Media</span><span class="pc-tag">Design</span></div></div>
-    </div>
-    <div class="portfolio-card reveal" data-cat="web">
-      <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(17,34,64,0.9));">🐧</div>
-      <div class="pc-body"><div class="pc-type">Linux & Hosting</div><h3 class="pc-title">Linux Server Migration</h3><p class="pc-desc">Complete server migration from Windows to Ubuntu, with ERPNext, SSL, Nginx, and security hardening.</p><div class="pc-tags"><span class="pc-tag">Ubuntu</span><span class="pc-tag">Nginx</span><span class="pc-tag">ERPNext</span><span class="pc-tag">SSL</span></div></div>
-    </div>
+    <!-- Projects load dynamically from localStorage (same as panel.html) -->
   </div>
 </section>
 
@@ -124,20 +110,116 @@
   </div>
   <div class="footer-bottom"><p>© 2026 Nexavo Software House. All rights reserved.</p><p style="color:var(--gold);font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:2px;">PREMIUM DIGITAL SOLUTIONS</p></div>
 </footer>
+
+<!-- Admin Panel Link -->
+<a href="panel.html" class="admin-link">🔐 Admin Panel</a>
+
 <script src="main.js"></script>
 <script>
-function filterPortfolio(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.portfolio-card').forEach(card => {
-    if (cat === 'all' || card.dataset.cat === cat) {
-      card.style.display = 'block';
-      card.style.animation = 'fadeUp 0.4s ease forwards';
-    } else {
-      card.style.display = 'none';
+  // Same STORAGE_KEY as panel.html
+  const STORAGE_KEY = 'nexavo_portfolio_projects';
+
+  // Default projects (same as panel.html)
+  const DEFAULT_PROJECTS = [
+    { title: "Corporate Website — TechCorp", category: "web", desc: "Full corporate website with CMS, SEO, multi-language.", tags: ["HTML","CSS","JS","PHP"], emoji: "🌐" },
+    { title: "ERPNext Full Setup — Manufacturing Co.", category: "erp", desc: "Complete ERPNext implementation with custom modules.", tags: ["ERPNext","Frappe","Python"], emoji: "⚙️" },
+    { title: "Online Store — FashionHub", category: "ecommerce", desc: "Full e-commerce platform with payment integration.", tags: ["WooCommerce","WordPress","Payment API"], emoji: "🛒" },
+    { title: "Brand Identity — StartupX", category: "design", desc: "Complete brand identity including logo, color palette.", tags: ["Logo","Illustrator","Brand Kit"], emoji: "🎨" },
+    { title: "Inventory Manager App", category: "app", desc: "Cross-platform inventory management app.", tags: ["React","Node.js","MySQL"], emoji: "📱" },
+    { title: "Portfolio Website — Agency", category: "web", desc: "Animated portfolio website with custom animations.", tags: ["HTML","GSAP","JS"], emoji: "💼" },
+    { title: "Custom ERP Fields — Retail Chain", category: "erp", desc: "Custom DocTypes and automated reports.", tags: ["ERPNext","Custom Fields"], emoji: "📊" },
+    { title: "Linux Server Migration", category: "web", desc: "Server migration with security hardening.", tags: ["Ubuntu","Nginx","SSL"], emoji: "🐧" }
+  ];
+
+  // Get projects from localStorage (same data as panel.html)
+  function getProjects() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored && JSON.parse(stored).length > 0) {
+      return JSON.parse(stored);
+    }
+    // Initialize with defaults if nothing exists
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
+    return [...DEFAULT_PROJECTS];
+  }
+
+  // Render the portfolio grid
+  function renderPortfolioGrid() {
+    const projects = getProjects();
+    const grid = document.getElementById('portfolio-grid');
+    if (!grid) return;
+    
+    if (projects.length === 0) {
+      grid.innerHTML = '<div style="text-align:center; padding:60px; color:#888;">No projects yet. Go to Admin Panel to add your first project! 🚀</div>';
+      return;
+    }
+    
+    function getCatName(cat) {
+      const names = {
+        'web': 'Web Development',
+        'erp': 'ERP',
+        'design': 'Design',
+        'ecommerce': 'E-Commerce',
+        'app': 'App Development'
+      };
+      return names[cat] || cat;
+    }
+    
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+    
+    grid.innerHTML = projects.map(proj => `
+      <div class="portfolio-card reveal" data-cat="${proj.category}">
+        <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(26,51,88,0.8)); font-size:3.8rem; display:flex; align-items:center; justify-content:center;">
+          ${proj.emoji || '📁'}
+        </div>
+        <div class="pc-body">
+          <div class="pc-type">${getCatName(proj.category)}</div>
+          <h3 class="pc-title">${escapeHtml(proj.title)}</h3>
+          <p class="pc-desc">${escapeHtml(proj.desc)}</p>
+          <div class="pc-tags">
+            ${(proj.tags || []).map(t => `<span class="pc-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Filter function
+  function filterPortfolio(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.portfolio-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = 'block';
+        card.style.animation = 'fadeUp 0.4s ease forwards';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Listen for storage changes (when panel.html saves new data)
+  window.addEventListener('storage', function(e) {
+    if (e.key === STORAGE_KEY) {
+      console.log('Projects updated from admin panel, refreshing...');
+      renderPortfolioGrid();
     }
   });
-}
+
+  // Initial render
+  renderPortfolioGrid();
+  
+  // Also refresh every 2 seconds to catch any changes (backup)
+  setInterval(function() {
+    renderPortfolioGrid();
+  }, 2000);
 </script>
 </body>
 </html>
