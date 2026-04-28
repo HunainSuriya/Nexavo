@@ -13,24 +13,59 @@
       font-size:0.72rem; letter-spacing:1px; cursor:pointer; transition:all 0.3s; text-transform:uppercase;
     }
     .filter-btn:hover,.filter-btn.active { background:rgba(201,168,76,0.12); border-color:var(--gold); color:var(--gold); box-shadow:var(--glow-gold); }
-    .portfolio-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px; }
+    .portfolio-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:24px; }
     .portfolio-card {
       background:var(--navy-mid); border:1px solid var(--border);
       border-radius:14px; overflow:hidden; transition:all 0.4s;
+      cursor: pointer;
     }
     .portfolio-card:hover { border-color:var(--border-mid); transform:translateY(-6px); box-shadow:var(--glow-gold); }
     .pc-thumb {
-      height: 190px; display:flex; align-items:center; justify-content:center;
-      font-size: 3.8rem; position:relative; overflow:hidden;
+      height: 200px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      background-size: cover;
+      background-position: center;
+      background-color: #0A1628;
     }
-    .pc-thumb::after { content:''; position:absolute; inset:0; background:var(--gradient-gold); opacity:0; transition:opacity 0.3s; }
-    .portfolio-card:hover .pc-thumb::after { opacity:0.06; }
+    .pc-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .pc-thumb .no-image {
+      font-size: 3.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .pc-thumb::after { content:''; position:absolute; inset:0; background:var(--gradient-gold); opacity:0; transition:opacity 0.3s; pointer-events: none; }
+    .portfolio-card:hover .pc-thumb::after { opacity:0.1; }
     .pc-body { padding:24px; }
     .pc-type { font-size:0.68rem; color:var(--gold); font-family:'Space Mono',monospace; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
     .pc-title { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--white); margin-bottom:9px; }
     .pc-desc { font-size:0.84rem; color:var(--white-muted); line-height:1.6; margin-bottom:14px; font-weight:300; }
-    .pc-tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .pc-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:15px; }
     .pc-tag { padding:3px 10px; background:rgba(201,168,76,0.07); border:1px solid var(--border); border-radius:3px; font-size:0.7rem; color:var(--white-muted); font-family:'Space Mono',monospace; }
+    .pc-link {
+      display: inline-block;
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      border: 1px solid var(--gold);
+      padding: 6px 14px;
+      border-radius: 25px;
+      transition: all 0.3s;
+    }
+    .pc-link:hover {
+      background: var(--gold);
+      color: #0A1628;
+    }
     
     /* Admin Panel Styles */
     .admin-toggle {
@@ -50,7 +85,6 @@
     }
     .admin-toggle:hover { transform: scale(1.05); background: #e0c87a; }
     
-    /* Password Modal */
     .password-modal {
       display: none;
       position: fixed;
@@ -58,14 +92,12 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.9);
       z-index: 1000;
       justify-content: center;
       align-items: center;
     }
-    .password-modal.show {
-      display: flex;
-    }
+    .password-modal.show { display: flex; }
     .password-box {
       background: #0F1F2E;
       border: 2px solid var(--gold);
@@ -74,13 +106,8 @@
       max-width: 400px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 50px rgba(201,168,76,0.3);
     }
-    .password-box h3 {
-      color: var(--gold);
-      margin-bottom: 20px;
-      font-family: 'Playfair Display', serif;
-    }
+    .password-box h3 { color: var(--gold); margin-bottom: 20px; }
     .password-box input {
       width: 100%;
       padding: 12px;
@@ -91,10 +118,6 @@
       font-size: 16px;
       margin-bottom: 20px;
     }
-    .password-box input:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
     .password-box button {
       background: var(--gold);
       border: none;
@@ -104,15 +127,7 @@
       font-weight: bold;
       margin: 5px;
     }
-    .password-box button:hover {
-      background: #e0c87a;
-    }
-    .password-error {
-      color: #f87171;
-      font-size: 14px;
-      margin-top: 10px;
-      display: none;
-    }
+    .password-error { color: #f87171; font-size: 14px; margin-top: 10px; display: none; }
     
     .admin-panel {
       display: none;
@@ -121,7 +136,7 @@
       border: 1px solid var(--gold);
       border-radius: 28px;
       margin: 40px auto;
-      max-width: 1100px;
+      max-width: 1200px;
       padding: 28px 30px;
       z-index: 200;
       position: relative;
@@ -132,7 +147,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .form-row { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 25px; }
-    .input-group { flex: 1; min-width: 180px; }
+    .input-group { flex: 1; min-width: 200px; }
     .input-group label {
       display: block; font-size: 0.7rem; text-transform: uppercase;
       color: var(--gold); margin-bottom: 6px; font-family: 'Space Mono', monospace;
@@ -141,15 +156,49 @@
       width: 100%; background: #0A1628; border: 1px solid var(--border);
       border-radius: 12px; padding: 12px 14px; color: white;
     }
+    .input-group input[type="file"] {
+      padding: 8px;
+      background: #0A1628;
+    }
+    .image-preview {
+      margin-top: 10px;
+      max-width: 150px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0A1628;
+      border: 1px solid var(--border);
+    }
+    .image-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
     .btn-admin {
       background: transparent; border: 1px solid var(--gold); color: var(--gold);
       padding: 10px 24px; border-radius: 40px; cursor: pointer; font-family: 'Space Mono', monospace;
+      margin-right: 10px;
+      margin-bottom: 10px;
     }
     .btn-admin:hover { background: var(--gold); color: #0A1628; }
     .project-item {
       display: flex; justify-content: space-between; align-items: center;
       background: rgba(15,31,46,0.7); border-radius: 16px; padding: 12px 18px;
       margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .project-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+    }
+    .project-thumb-small {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #0A1628;
     }
     .delete-project-btn {
       background: rgba(200,50,50,0.8); border: none; color: white;
@@ -176,9 +225,14 @@
       border-radius: 20px;
       border: 1px dashed var(--border);
     }
-    .empty-state p {
-      color: #888;
-      margin-bottom: 15px;
+    .live-badge {
+      background: #4caf50;
+      color: white;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 8px;
+      vertical-align: middle;
     }
   </style>
 </head>
@@ -211,42 +265,73 @@
 <!-- Password Modal -->
 <div class="password-modal" id="passwordModal">
   <div class="password-box">
-    <h3>🔐 Admin Access</h3>
-    <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="off">
+    <h3>🔐 Admin Access Required</h3>
+    <input type="password" id="adminPassword" placeholder="Enter admin password" autocomplete="off">
     <div>
-      <button onclick="verifyPassword()">Submit</button>
+      <button onclick="checkPasswordAndOpen()">Submit</button>
       <button onclick="closePasswordModal()">Cancel</button>
     </div>
-    <div class="password-error" id="passwordError">❌ Wrong password! Try again.</div>
+    <div class="password-error" id="passwordError">❌ Wrong password! Access denied.</div>
   </div>
 </div>
 
-<!-- Hidden Admin Panel -->
+<!-- Admin Panel -->
 <div class="admin-panel" id="adminPanel">
   <button class="close-panel-btn" onclick="closeAdminPanel()">✕</button>
   <h3 style="color:var(--gold); margin-bottom: 20px;">⚡ Portfolio Manager</h3>
   <div id="adminSuccessMsg" class="success-msg"></div>
+  
   <div class="form-row">
-    <div class="input-group"><label>Project Title</label><input type="text" id="title" placeholder="e.g., Amazing Website"></div>
-    <div class="input-group"><label>Category</label>
-     <select id="category">
-  <option value="web">Web Development</option>
-  <option value="desktop">Desktop App</option>
-  <option value="erp">ERP</option>
-  <option value="design">Design</option>
-  <option value="ecommerce">E-Commerce</option>
-</select>
+    <div class="input-group">
+      <label>Project Title</label>
+      <input type="text" id="title" placeholder="e.g., Amazing Website">
+    </div>
+    <div class="input-group">
+      <label>Category</label>
+      <select id="category">
+        <option value="web">Web Development</option>
+        <option value="desktop">Desktop App</option>
+        <option value="erp">ERP</option>
+        <option value="design">Design</option>
+        <option value="ecommerce">E-Commerce</option>
+      </select>
     </div>
   </div>
+  
   <div class="form-row">
-    <div class="input-group"><label>Description</label><textarea id="description" rows="2" placeholder="Describe the project..."></textarea></div>
+    <div class="input-group">
+      <label>Description</label>
+      <textarea id="description" rows="2" placeholder="Describe the project..."></textarea>
+    </div>
   </div>
+  
   <div class="form-row">
-    <div class="input-group"><label>Technologies (comma separated)</label><input type="text" id="tags" placeholder="React, Node.js"></div>
-    <div class="input-group"><label>Emoji Icon</label><input type="text" id="emoji" placeholder="🚀" value="🚀"></div>
+    <div class="input-group">
+      <label>Technologies (comma separated)</label>
+      <input type="text" id="tags" placeholder="React, Node.js, MongoDB">
+    </div>
+    <div class="input-group">
+      <label>Emoji Icon (fallback if no image)</label>
+      <input type="text" id="emoji" placeholder="🚀" value="🚀">
+    </div>
   </div>
+  
+  <div class="form-row">
+    <div class="input-group">
+      <label>🌐 Live Project URL (Netlify link)</label>
+      <input type="url" id="liveUrl" placeholder="https://your-project.netlify.app">
+    </div>
+    <div class="input-group">
+      <label>🖼️ Thumbnail Image (upload from computer)</label>
+      <input type="file" id="thumbnailImage" accept="image/*">
+      <div class="image-preview" id="imagePreview" style="display: none;">
+        <img id="previewImg" src="">
+      </div>
+    </div>
+  </div>
+  
   <button class="btn-admin" onclick="addProject()">➕ Add Project</button>
-  <button class="btn-admin" onclick="resetToDefault()" style="margin-left:10px;">⟳ Reset to Default</button>
+  <button class="btn-admin" onclick="resetToDefault()">⟳ Reset to Default</button>
   
   <div style="margin-top: 30px;">
     <h4 style="color:var(--gold); margin-bottom: 15px;">📋 Your Projects</h4>
@@ -254,17 +339,17 @@
   </div>
 </div>
 
-<button class="admin-toggle" onclick="showPasswordModal()">🔐 Admin Panel</button>
+<button class="admin-toggle" onclick="requestAdminAccess()">🔐 Admin Panel</button>
 
 <section>
- <div class="portfolio-filters reveal">
-  <button class="filter-btn active" onclick="filterPortfolio('all',this)">All Projects</button>
-  <button class="filter-btn" onclick="filterPortfolio('web',this)">Web Dev</button>
-  <button class="filter-btn" onclick="filterPortfolio('desktop',this)">Desktop App</button>
-  <button class="filter-btn" onclick="filterPortfolio('erp',this)">ERP</button>
-  <button class="filter-btn" onclick="filterPortfolio('design',this)">Design</button>
-  <button class="filter-btn" onclick="filterPortfolio('ecommerce',this)">E-Commerce</button>
-</div>
+  <div class="portfolio-filters reveal">
+    <button class="filter-btn active" onclick="filterPortfolio('all',this)">All Projects</button>
+    <button class="filter-btn" onclick="filterPortfolio('web',this)">Web Dev</button>
+    <button class="filter-btn" onclick="filterPortfolio('desktop',this)">Desktop App</button>
+    <button class="filter-btn" onclick="filterPortfolio('erp',this)">ERP</button>
+    <button class="filter-btn" onclick="filterPortfolio('design',this)">Design</button>
+    <button class="filter-btn" onclick="filterPortfolio('ecommerce',this)">E-Commerce</button>
+  </div>
   <div class="portfolio-grid" id="portfolio-grid"></div>
 </section>
 
@@ -278,7 +363,7 @@
 <footer>
   <div class="footer-grid">
     <div class="footer-brand"><a href="index.html" class="nav-logo" style="font-size:1.5rem;">Nexavo<span>.</span></a><p>Premium software house delivering cutting-edge digital solutions.</p></div>
-    <div class="footer-col"><h4>Services</h4><ul><li><a href="services.html">Web Development</a></li><li><a href="services.html">ERPNext</a></li><li><a href="services.html">App Development</a></li></ul></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="services.html">Web Development</a></li><li><a href="services.html">Desktop Apps</a></li><li><a href="services.html">ERPNext</a></li></ul></div>
     <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="team.html">Team</a></li><li><a href="portfolio.html">Portfolio</a></li></ul></div>
     <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexavo.com">info@nexavo.com</a></li><li><a href="contact.html">Get a Quote</a></li></ul></div>
   </div>
@@ -287,32 +372,23 @@
 
 <script src="main.js"></script>
 <script>
-  // ========== PASSWORD CONFIGURATION ==========
   const ADMIN_PASSWORD = "nexavo2024";
-  // ============================================
-  
   const STORAGE_KEY = 'nexavo_portfolio_projects';
   let isAdminLoggedIn = false;
+  let currentImageData = null;
   
   const DEFAULT_PROJECTS = [
-    { title: "Corporate Website — TechCorp", category: "web", desc: "Full corporate website with CMS, SEO, multi-language.", tags: ["HTML","CSS","JS","PHP"], emoji: "🌐" },
-    { title: "ERPNext Full Setup — Manufacturing Co.", category: "erp", desc: "Complete ERPNext implementation with custom modules.", tags: ["ERPNext","Frappe","Python"], emoji: "⚙️" },
-    { title: "Online Store — FashionHub", category: "ecommerce", desc: "Full e-commerce platform with payment integration.", tags: ["WooCommerce","WordPress"], emoji: "🛒" },
-    { title: "Brand Identity — StartupX", category: "design", desc: "Complete brand identity including logo, color palette.", tags: ["Logo","Illustrator"], emoji: "🎨" },
-    { title: "Inventory Manager App", category: "app", desc: "Cross-platform inventory management app.", tags: ["React","Node.js"], emoji: "📱" }
+    { title: "Corporate Website — TechCorp", category: "web", desc: "Full corporate website with CMS, SEO, multi-language.", tags: ["HTML","CSS","JS","PHP"], emoji: "🌐", liveUrl: "", thumbnail: "" },
+    { title: "ERPNext Full Setup", category: "erp", desc: "Complete ERPNext implementation with custom modules.", tags: ["ERPNext","Frappe","Python"], emoji: "⚙️", liveUrl: "", thumbnail: "" },
+    { title: "Online Store — FashionHub", category: "ecommerce", desc: "Full e-commerce platform with payment integration.", tags: ["WooCommerce","WordPress"], emoji: "🛒", liveUrl: "", thumbnail: "" }
   ];
 
-  // FIXED: Get projects - allows empty array (no auto-reset)
   function getProjects() {
     const stored = localStorage.getItem(STORAGE_KEY);
-    
-    // If nothing in localStorage yet, initialize with defaults
     if (stored === null) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
       return [...DEFAULT_PROJECTS];
     }
-    
-    // Return whatever is in localStorage (even if empty array)
     return JSON.parse(stored);
   }
 
@@ -328,29 +404,33 @@
     if (!grid) return;
     
     if (projects.length === 0) {
-      grid.innerHTML = `
-        <div class="empty-state">
-          <p>✨ No projects yet.</p>
-          <p style="font-size: 14px;">Click the <strong style="color:var(--gold);">🔐 Admin Panel</strong> button to add your first project!</p>
-        </div>
-      `;
+      grid.innerHTML = `<div class="empty-state"><p>✨ No projects yet.</p><p style="font-size: 14px;">Click the <strong style="color:var(--gold);">🔐 Admin Panel</strong> button to add your first project!</p></div>`;
       return;
     }
     
-    const catNames = {'web':'Web Development','erp':'ERP','design':'Design','ecommerce':'E-Commerce','app':'App Development'};
+    const catNames = {'web':'Web Development','desktop':'Desktop App','erp':'ERP','design':'Design','ecommerce':'E-Commerce'};
     function escape(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
     
-    grid.innerHTML = projects.map(proj => `
-      <div class="portfolio-card" data-cat="${proj.category}">
-        <div class="pc-thumb" style="font-size:3.8rem;">${proj.emoji || '📁'}</div>
-        <div class="pc-body">
-          <div class="pc-type">${catNames[proj.category] || proj.category}</div>
-          <h3 class="pc-title">${escape(proj.title)}</h3>
-          <p class="pc-desc">${escape(proj.desc)}</p>
-          <div class="pc-tags">${(proj.tags || []).map(t => `<span class="pc-tag">${escape(t)}</span>`).join('')}</div>
+    grid.innerHTML = projects.map((proj, idx) => {
+      const hasThumbnail = proj.thumbnail && proj.thumbnail.startsWith('data:image');
+      const liveUrl = proj.liveUrl || '';
+      const hasLiveUrl = liveUrl && liveUrl !== '';
+      
+      return `
+        <div class="portfolio-card" data-cat="${proj.category}" onclick="${hasLiveUrl ? `window.open('${liveUrl}', '_blank')` : ''}" style="${hasLiveUrl ? 'cursor: pointer;' : ''}">
+          <div class="pc-thumb">
+            ${hasThumbnail ? `<img src="${proj.thumbnail}" alt="${escape(proj.title)}">` : `<div class="no-image">${proj.emoji || '📁'}</div>`}
+          </div>
+          <div class="pc-body">
+            <div class="pc-type">${catNames[proj.category] || proj.category} ${hasLiveUrl ? '<span class="live-badge">LIVE</span>' : ''}</div>
+            <h3 class="pc-title">${escape(proj.title)}</h3>
+            <p class="pc-desc">${escape(proj.desc)}</p>
+            <div class="pc-tags">${(proj.tags || []).map(t => `<span class="pc-tag">${escape(t)}</span>`).join('')}</div>
+            ${hasLiveUrl ? `<a href="${liveUrl}" target="_blank" class="pc-link" onclick="event.stopPropagation()">🔗 View Live Project →</a>` : ''}
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function renderProjectsList() {
@@ -366,9 +446,12 @@
     
     container.innerHTML = projects.map((proj, idx) => `
       <div class="project-item">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <span style="font-size:1.8rem;">${proj.emoji || '📁'}</span>
-          <div><strong style="color:white;">${escape(proj.title)}</strong><div style="font-size:0.7rem; color:var(--gold);">${proj.category}</div></div>
+        <div class="project-info">
+          ${proj.thumbnail && proj.thumbnail.startsWith('data:image') ? `<img class="project-thumb-small" src="${proj.thumbnail}" alt="thumb">` : `<div style="font-size:30px;">${proj.emoji || '📁'}</div>`}
+          <div>
+            <strong style="color:white;">${escape(proj.title)}</strong>
+            <div style="font-size:0.7rem; color:var(--gold);">${proj.category} ${proj.liveUrl ? '🔗 Has Link' : ''}</div>
+          </div>
         </div>
         <button class="delete-project-btn" onclick="deleteProject(${idx})">✕ Delete</button>
       </div>
@@ -388,6 +471,7 @@
     const desc = document.getElementById('description').value.trim();
     const tagsInput = document.getElementById('tags').value.trim();
     const emoji = document.getElementById('emoji').value.trim() || '🚀';
+    const liveUrl = document.getElementById('liveUrl').value.trim();
     
     if (!title || !desc) { 
       showAdminMessage('❌ Please fill in both Title and Description', true); 
@@ -396,7 +480,13 @@
     
     const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : [];
     const projects = getProjects();
-    projects.push({ title, category, desc, tags, emoji });
+    
+    let thumbnail = '';
+    if (currentImageData) {
+      thumbnail = currentImageData;
+    }
+    
+    projects.push({ title, category, desc, tags, emoji, liveUrl, thumbnail });
     saveProjects(projects);
     
     // Clear form
@@ -404,12 +494,16 @@
     document.getElementById('description').value = '';
     document.getElementById('tags').value = '';
     document.getElementById('emoji').value = '🚀';
+    document.getElementById('liveUrl').value = '';
+    document.getElementById('thumbnailImage').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    currentImageData = null;
     
     showAdminMessage('✅ Project added successfully!');
   }
 
   function resetToDefault() {
-    if (confirm('⚠️ This will delete ALL your current projects and restore the default ones. Are you sure?')) {
+    if (confirm('⚠️ This will delete ALL your current projects and restore defaults. Are you sure?')) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
       renderPortfolioGrid();
       if (isAdminLoggedIn) renderProjectsList();
@@ -417,8 +511,23 @@
     }
   }
 
-  // Password functions
-  function showPasswordModal() {
+  // Image upload handler
+  document.getElementById('thumbnailImage')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        currentImageData = event.target.result;
+        const preview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        previewImg.src = currentImageData;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function requestAdminAccess() {
     document.getElementById('passwordModal').classList.add('show');
     document.getElementById('adminPassword').value = '';
     document.getElementById('passwordError').style.display = 'none';
@@ -428,21 +537,16 @@
     document.getElementById('passwordModal').classList.remove('show');
   }
   
-  function verifyPassword() {
+  function checkPasswordAndOpen() {
     const password = document.getElementById('adminPassword').value;
     if (password === ADMIN_PASSWORD) {
       isAdminLoggedIn = true;
       closePasswordModal();
-      showAdminPanel();
+      document.getElementById('adminPanel').classList.add('show');
+      renderProjectsList();
     } else {
       document.getElementById('passwordError').style.display = 'block';
     }
-  }
-  
-  function showAdminPanel() {
-    const panel = document.getElementById('adminPanel');
-    panel.classList.add('show');
-    renderProjectsList();
   }
   
   function closeAdminPanel() {
@@ -456,10 +560,7 @@
     msgDiv.style.display = 'block';
     msgDiv.style.background = isError ? 'rgba(200,50,50,0.2)' : 'rgba(76,175,80,0.2)';
     msgDiv.style.borderColor = isError ? '#f44336' : '#4caf50';
-    msgDiv.style.color = isError ? '#f87171' : '#4caf50';
-    setTimeout(() => {
-      msgDiv.style.display = 'none';
-    }, 3000);
+    setTimeout(() => msgDiv.style.display = 'none', 3000);
   }
 
   function filterPortfolio(cat, btn) {
@@ -470,12 +571,10 @@
     });
   }
   
-  // Enter key submit for password
   document.getElementById('adminPassword')?.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') verifyPassword();
+    if (e.key === 'Enter') checkPasswordAndOpen();
   });
 
-  // Initialize
   renderPortfolioGrid();
 </script>
 </body>
