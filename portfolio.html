@@ -17,34 +17,14 @@
     .portfolio-card {
       background:var(--navy-mid); border:1px solid var(--border);
       border-radius:14px; overflow:hidden; transition:all 0.4s;
-      cursor: pointer;
     }
     .portfolio-card:hover { border-color:var(--border-mid); transform:translateY(-6px); box-shadow:var(--glow-gold); }
     .pc-thumb {
-      height: 200px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-      overflow:hidden;
-      background-size: cover;
-      background-position: center;
-      background-color: #0A1628;
+      height: 200px; display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden; background-color: #0A1628;
     }
-    .pc-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .pc-thumb .no-image {
-      font-size: 3.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-    .pc-thumb::after { content:''; position:absolute; inset:0; background:var(--gradient-gold); opacity:0; transition:opacity 0.3s; pointer-events: none; }
-    .portfolio-card:hover .pc-thumb::after { opacity:0.1; }
+    .pc-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .pc-thumb .no-image { font-size: 3.8rem; display: flex; align-items: center; justify-content: center; height: 100%; }
     .pc-body { padding:24px; }
     .pc-type { font-size:0.68rem; color:var(--gold); font-family:'Space Mono',monospace; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
     .pc-title { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--white); margin-bottom:9px; }
@@ -52,94 +32,49 @@
     .pc-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:15px; }
     .pc-tag { padding:3px 10px; background:rgba(201,168,76,0.07); border:1px solid var(--border); border-radius:3px; font-size:0.7rem; color:var(--white-muted); font-family:'Space Mono',monospace; }
     .pc-link {
-      display: inline-block;
-      color: var(--gold);
-      text-decoration: none;
-      font-size: 0.75rem;
-      font-family: 'Space Mono', monospace;
-      border: 1px solid var(--gold);
-      padding: 6px 14px;
-      border-radius: 25px;
+      display: inline-block; color: var(--gold); text-decoration: none;
+      font-size: 0.75rem; font-family: 'Space Mono', monospace;
+      border: 1px solid var(--gold); padding: 6px 14px; border-radius: 25px;
       transition: all 0.3s;
     }
-    .pc-link:hover {
-      background: var(--gold);
-      color: #0A1628;
-    }
+    .pc-link:hover { background: var(--gold); color: #0A1628; }
     
-    /* Admin Panel Styles */
     .admin-toggle {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--gold);
-      color: #0A1628;
-      padding: 12px 20px;
-      border-radius: 40px;
-      border: none;
-      font-weight: bold;
-      font-family: 'Space Mono', monospace;
-      cursor: pointer;
-      z-index: 100;
-      box-shadow: 0 0 15px rgba(201,168,76,0.5);
+      position: fixed; bottom: 30px; right: 30px;
+      background: var(--gold); color: #0A1628; padding: 12px 20px;
+      border-radius: 40px; border: none; font-weight: bold;
+      font-family: 'Space Mono', monospace; cursor: pointer; z-index: 100;
     }
-    .admin-toggle:hover { transform: scale(1.05); background: #e0c87a; }
+    .admin-toggle:hover { transform: scale(1.05); }
     
     .password-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+      z-index: 1000; justify-content: center; align-items: center;
     }
     .password-modal.show { display: flex; }
     .password-box {
-      background: #0F1F2E;
-      border: 2px solid var(--gold);
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 400px;
-      width: 90%;
-      text-align: center;
+      background: #0F1F2E; border: 2px solid var(--gold);
+      border-radius: 20px; padding: 40px; max-width: 400px;
+      width: 90%; text-align: center;
     }
     .password-box h3 { color: var(--gold); margin-bottom: 20px; }
     .password-box input {
-      width: 100%;
-      padding: 12px;
-      background: #0A1628;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: white;
-      font-size: 16px;
-      margin-bottom: 20px;
+      width: 100%; padding: 12px; background: #0A1628;
+      border: 1px solid var(--border); border-radius: 8px;
+      color: white; font-size: 16px; margin-bottom: 20px;
     }
     .password-box button {
-      background: var(--gold);
-      border: none;
-      padding: 10px 30px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-      margin: 5px;
+      background: var(--gold); border: none; padding: 10px 30px;
+      border-radius: 30px; cursor: pointer; font-weight: bold; margin: 5px;
     }
     .password-error { color: #f87171; font-size: 14px; margin-top: 10px; display: none; }
     
     .admin-panel {
-      display: none;
-      background: rgba(10, 22, 40, 0.97);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--gold);
-      border-radius: 28px;
-      margin: 40px auto;
-      max-width: 1200px;
-      padding: 28px 30px;
-      z-index: 200;
-      position: relative;
+      display: none; background: rgba(10, 22, 40, 0.97);
+      backdrop-filter: blur(12px); border: 1px solid var(--gold);
+      border-radius: 28px; margin: 40px auto; max-width: 1200px;
+      padding: 28px 30px; z-index: 200; position: relative;
     }
     .admin-panel.show { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn {
@@ -156,49 +91,18 @@
       width: 100%; background: #0A1628; border: 1px solid var(--border);
       border-radius: 12px; padding: 12px 14px; color: white;
     }
-    .input-group input[type="file"] {
-      padding: 8px;
-      background: #0A1628;
-    }
-    .image-preview {
-      margin-top: 10px;
-      max-width: 150px;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #0A1628;
-      border: 1px solid var(--border);
-    }
-    .image-preview img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .image-preview { margin-top: 10px; max-width: 150px; border-radius: 8px; overflow: hidden; }
+    .image-preview img { width: 100%; height: auto; }
     .btn-admin {
       background: transparent; border: 1px solid var(--gold); color: var(--gold);
-      padding: 10px 24px; border-radius: 40px; cursor: pointer; font-family: 'Space Mono', monospace;
-      margin-right: 10px;
-      margin-bottom: 10px;
+      padding: 10px 24px; border-radius: 40px; cursor: pointer;
+      font-family: 'Space Mono', monospace; margin-right: 10px;
     }
     .btn-admin:hover { background: var(--gold); color: #0A1628; }
     .project-item {
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(15,31,46,0.7); border-radius: 16px; padding: 12px 18px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .project-info {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      flex: 1;
-    }
-    .project-thumb-small {
-      width: 50px;
-      height: 50px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: #0A1628;
+      background: rgba(15,31,46,0.7); border-radius: 16px;
+      padding: 12px 18px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
     }
     .delete-project-btn {
       background: rgba(200,50,50,0.8); border: none; color: white;
@@ -210,30 +114,9 @@
       padding: 10px; border-radius: 8px; margin-bottom: 15px;
       color: #4caf50; display: none;
     }
-    .close-panel-btn {
-      float: right;
-      background: transparent;
-      border: none;
-      color: var(--gold);
-      font-size: 24px;
-      cursor: pointer;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 60px;
-      background: rgba(15,31,46,0.5);
-      border-radius: 20px;
-      border: 1px dashed var(--border);
-    }
-    .live-badge {
-      background: #4caf50;
-      color: white;
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 20px;
-      margin-left: 8px;
-      vertical-align: middle;
-    }
+    .close-panel-btn { float: right; background: transparent; border: none; color: var(--gold); font-size: 24px; cursor: pointer; }
+    .empty-state { text-align: center; padding: 60px; background: rgba(15,31,46,0.5); border-radius: 20px; border: 1px dashed var(--border); }
+    .live-badge { background: #4caf50; color: white; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
   </style>
 </head>
 <body>
@@ -262,32 +145,25 @@
   </div>
 </div>
 
-<!-- Password Modal -->
 <div class="password-modal" id="passwordModal">
   <div class="password-box">
     <h3>🔐 Admin Access Required</h3>
-    <input type="password" id="adminPassword" placeholder="Enter admin password" autocomplete="off">
+    <input type="password" id="adminPassword" placeholder="Enter admin password">
     <div>
       <button onclick="checkPasswordAndOpen()">Submit</button>
       <button onclick="closePasswordModal()">Cancel</button>
     </div>
-    <div class="password-error" id="passwordError">❌ Wrong password! Access denied.</div>
+    <div class="password-error" id="passwordError">❌ Wrong password!</div>
   </div>
 </div>
 
-<!-- Admin Panel -->
 <div class="admin-panel" id="adminPanel">
   <button class="close-panel-btn" onclick="closeAdminPanel()">✕</button>
   <h3 style="color:var(--gold); margin-bottom: 20px;">⚡ Portfolio Manager</h3>
   <div id="adminSuccessMsg" class="success-msg"></div>
-  
   <div class="form-row">
-    <div class="input-group">
-      <label>Project Title</label>
-      <input type="text" id="title" placeholder="e.g., Amazing Website">
-    </div>
-    <div class="input-group">
-      <label>Category</label>
+    <div class="input-group"><label>Project Title</label><input type="text" id="title" placeholder="e.g., Amazing Website"></div>
+    <div class="input-group"><label>Category</label>
       <select id="category">
         <option value="web">Web Development</option>
         <option value="desktop">Desktop App</option>
@@ -297,46 +173,20 @@
       </select>
     </div>
   </div>
-  
   <div class="form-row">
-    <div class="input-group">
-      <label>Description</label>
-      <textarea id="description" rows="2" placeholder="Describe the project..."></textarea>
-    </div>
+    <div class="input-group"><label>Description</label><textarea id="description" rows="2" placeholder="Describe the project..."></textarea></div>
   </div>
-  
   <div class="form-row">
-    <div class="input-group">
-      <label>Technologies (comma separated)</label>
-      <input type="text" id="tags" placeholder="React, Node.js, MongoDB">
-    </div>
-    <div class="input-group">
-      <label>Emoji Icon (fallback if no image)</label>
-      <input type="text" id="emoji" placeholder="🚀" value="🚀">
-    </div>
+    <div class="input-group"><label>Technologies (comma separated)</label><input type="text" id="tags" placeholder="React, Node.js"></div>
+    <div class="input-group"><label>Emoji Icon</label><input type="text" id="emoji" placeholder="🚀" value="🚀"></div>
   </div>
-  
   <div class="form-row">
-    <div class="input-group">
-      <label>🌐 Live Project URL (Netlify link)</label>
-      <input type="url" id="liveUrl" placeholder="https://your-project.netlify.app">
-    </div>
-    <div class="input-group">
-      <label>🖼️ Thumbnail Image (upload from computer)</label>
-      <input type="file" id="thumbnailImage" accept="image/*">
-      <div class="image-preview" id="imagePreview" style="display: none;">
-        <img id="previewImg" src="">
-      </div>
-    </div>
+    <div class="input-group"><label>Live Project URL</label><input type="url" id="liveUrl" placeholder="https://your-project.netlify.app"></div>
+    <div class="input-group"><label>Thumbnail Image</label><input type="file" id="thumbnailImage" accept="image/*"><div class="image-preview" id="imagePreview" style="display:none;"><img id="previewImg" src=""></div></div>
   </div>
-  
   <button class="btn-admin" onclick="addProject()">➕ Add Project</button>
   <button class="btn-admin" onclick="resetToDefault()">⟳ Reset to Default</button>
-  
-  <div style="margin-top: 30px;">
-    <h4 style="color:var(--gold); margin-bottom: 15px;">📋 Your Projects</h4>
-    <div id="projectsList"></div>
-  </div>
+  <div style="margin-top: 30px;"><h4 style="color:var(--gold);">📋 Your Projects</h4><div id="projectsList"></div></div>
 </div>
 
 <button class="admin-toggle" onclick="requestAdminAccess()">🔐 Admin Panel</button>
@@ -376,48 +226,74 @@
   const STORAGE_KEY = 'nexavo_portfolio_projects';
   let isAdminLoggedIn = false;
   let currentImageData = null;
-  
+
   const DEFAULT_PROJECTS = [
     { title: "Corporate Website — TechCorp", category: "web", desc: "Full corporate website with CMS, SEO, multi-language.", tags: ["HTML","CSS","JS","PHP"], emoji: "🌐", liveUrl: "", thumbnail: "" },
     { title: "ERPNext Full Setup", category: "erp", desc: "Complete ERPNext implementation with custom modules.", tags: ["ERPNext","Frappe","Python"], emoji: "⚙️", liveUrl: "", thumbnail: "" },
-    { title: "Online Store — FashionHub", category: "ecommerce", desc: "Full e-commerce platform with payment integration.", tags: ["WooCommerce","WordPress"], emoji: "🛒", liveUrl: "", thumbnail: "" }
+    { title: "Online Store — FashionHub", category: "ecommerce", desc: "Full e-commerce platform with payment integration.", tags: ["WooCommerce","WordPress"], emoji: "🛒", liveUrl: "", thumbnail: "" },
+    { title: "Desktop POS System", category: "desktop", desc: "Point of sale system for restaurants with billing and inventory.", tags: ["C#",".NET","SQL Server"], emoji: "💻", liveUrl: "", thumbnail: "" },
+    { title: "Brand Identity Package", category: "design", desc: "Complete logo and branding package for startup.", tags: ["Illustrator","Photoshop"], emoji: "🎨", liveUrl: "", thumbnail: "" }
   ];
 
-  function getProjects() {
+  // Cloud storage functions
+  async function getProjectsFromCloud() {
+    try {
+      const response = await fetch('/.netlify/functions/projects');
+      if (response.ok) {
+        const projects = await response.json();
+        if (projects && projects.length > 0) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+          return projects;
+        }
+      }
+    } catch (e) { console.log('Cloud fetch failed, using localStorage'); }
+    
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === null) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
-      return [...DEFAULT_PROJECTS];
-    }
-    return JSON.parse(stored);
+    if (stored && JSON.parse(stored).length > 0) return JSON.parse(stored);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
+    return [...DEFAULT_PROJECTS];
   }
 
-  function saveProjects(projects) {
+  async function saveProjectsToCloud(projects) {
+    try {
+      await fetch('/.netlify/functions/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(projects)
+      });
+    } catch(e) { console.log('Cloud save failed'); }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+  }
+
+  async function getProjects() {
+    return await getProjectsFromCloud();
+  }
+
+  async function saveProjects(projects) {
+    await saveProjectsToCloud(projects);
     renderPortfolioGrid();
     if (isAdminLoggedIn) renderProjectsList();
   }
 
-  function renderPortfolioGrid() {
-    const projects = getProjects();
+  async function renderPortfolioGrid() {
+    const projects = await getProjects();
     const grid = document.getElementById('portfolio-grid');
     if (!grid) return;
     
     if (projects.length === 0) {
-      grid.innerHTML = `<div class="empty-state"><p>✨ No projects yet.</p><p style="font-size: 14px;">Click the <strong style="color:var(--gold);">🔐 Admin Panel</strong> button to add your first project!</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><p>✨ No projects yet.</p><p style="font-size: 14px;">Click <strong style="color:var(--gold);">🔐 Admin Panel</strong> to add!</p></div>`;
       return;
     }
     
     const catNames = {'web':'Web Development','desktop':'Desktop App','erp':'ERP','design':'Design','ecommerce':'E-Commerce'};
-    function escape(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function escape(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
     
-    grid.innerHTML = projects.map((proj, idx) => {
+    grid.innerHTML = projects.map(proj => {
       const hasThumbnail = proj.thumbnail && proj.thumbnail.startsWith('data:image');
       const liveUrl = proj.liveUrl || '';
       const hasLiveUrl = liveUrl && liveUrl !== '';
-      
       return `
-        <div class="portfolio-card" data-cat="${proj.category}" onclick="${hasLiveUrl ? `window.open('${liveUrl}', '_blank')` : ''}" style="${hasLiveUrl ? 'cursor: pointer;' : ''}">
+        <div class="portfolio-card" data-cat="${proj.category}">
           <div class="pc-thumb">
             ${hasThumbnail ? `<img src="${proj.thumbnail}" alt="${escape(proj.title)}">` : `<div class="no-image">${proj.emoji || '📁'}</div>`}
           </div>
@@ -426,102 +302,79 @@
             <h3 class="pc-title">${escape(proj.title)}</h3>
             <p class="pc-desc">${escape(proj.desc)}</p>
             <div class="pc-tags">${(proj.tags || []).map(t => `<span class="pc-tag">${escape(t)}</span>`).join('')}</div>
-            ${hasLiveUrl ? `<a href="${liveUrl}" target="_blank" class="pc-link" onclick="event.stopPropagation()">🔗 View Live Project →</a>` : ''}
+            ${hasLiveUrl ? `<a href="${liveUrl}" target="_blank" class="pc-link">🔗 View Live Project →</a>` : ''}
           </div>
         </div>
       `;
     }).join('');
   }
 
-  function renderProjectsList() {
-    const projects = getProjects();
+  async function renderProjectsList() {
+    const projects = await getProjects();
     const container = document.getElementById('projectsList');
     if (!container) return;
-    function escape(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-    
+    function escape(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
     if (projects.length === 0) {
-      container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">No projects yet. Add your first project above! 🚀</p>';
+      container.innerHTML = '<p style="text-align:center; color:#888;">No projects yet. Add your first project!</p>';
       return;
     }
-    
     container.innerHTML = projects.map((proj, idx) => `
       <div class="project-item">
-        <div class="project-info">
-          ${proj.thumbnail && proj.thumbnail.startsWith('data:image') ? `<img class="project-thumb-small" src="${proj.thumbnail}" alt="thumb">` : `<div style="font-size:30px;">${proj.emoji || '📁'}</div>`}
-          <div>
-            <strong style="color:white;">${escape(proj.title)}</strong>
-            <div style="font-size:0.7rem; color:var(--gold);">${proj.category} ${proj.liveUrl ? '🔗 Has Link' : ''}</div>
-          </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          ${proj.thumbnail && proj.thumbnail.startsWith('data:image') ? `<img src="${proj.thumbnail}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">` : `<span style="font-size:30px;">${proj.emoji || '📁'}</span>`}
+          <div><strong style="color:white;">${escape(proj.title)}</strong><div style="font-size:0.7rem; color:var(--gold);">${proj.category}</div></div>
         </div>
         <button class="delete-project-btn" onclick="deleteProject(${idx})">✕ Delete</button>
       </div>
     `).join('');
   }
 
-  function deleteProject(index) {
-    const projects = getProjects();
+  async function deleteProject(index) {
+    const projects = await getProjects();
     projects.splice(index, 1);
-    saveProjects(projects);
+    await saveProjects(projects);
     showAdminMessage('✅ Project deleted!');
   }
 
-  function addProject() {
+  async function addProject() {
     const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
     const desc = document.getElementById('description').value.trim();
     const tagsInput = document.getElementById('tags').value.trim();
     const emoji = document.getElementById('emoji').value.trim() || '🚀';
     const liveUrl = document.getElementById('liveUrl').value.trim();
-    
-    if (!title || !desc) { 
-      showAdminMessage('❌ Please fill in both Title and Description', true); 
-      return; 
-    }
-    
+    if (!title || !desc) { showAdminMessage('❌ Fill title and description', true); return; }
     const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : [];
-    const projects = getProjects();
-    
-    let thumbnail = '';
-    if (currentImageData) {
-      thumbnail = currentImageData;
-    }
-    
-    projects.push({ title, category, desc, tags, emoji, liveUrl, thumbnail });
-    saveProjects(projects);
-    
-    // Clear form
+    const projects = await getProjects();
+    projects.push({ title, category, desc, tags, emoji, liveUrl, thumbnail: currentImageData || '' });
+    await saveProjects(projects);
     document.getElementById('title').value = '';
     document.getElementById('description').value = '';
     document.getElementById('tags').value = '';
-    document.getElementById('emoji').value = '🚀';
     document.getElementById('liveUrl').value = '';
     document.getElementById('thumbnailImage').value = '';
     document.getElementById('imagePreview').style.display = 'none';
     currentImageData = null;
-    
     showAdminMessage('✅ Project added successfully!');
   }
 
-  function resetToDefault() {
-    if (confirm('⚠️ This will delete ALL your current projects and restore defaults. Are you sure?')) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
+  async function resetToDefault() {
+    if (confirm('Reset all projects to defaults?')) {
+      await saveProjectsToCloud(DEFAULT_PROJECTS);
       renderPortfolioGrid();
       if (isAdminLoggedIn) renderProjectsList();
-      showAdminMessage('✅ Reset to default projects!');
+      showAdminMessage('✅ Reset to defaults!');
     }
   }
 
-  // Image upload handler
   document.getElementById('thumbnailImage')?.addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = function(event) {
         currentImageData = event.target.result;
-        const preview = document.getElementById('imagePreview');
-        const previewImg = document.getElementById('previewImg');
-        previewImg.src = currentImageData;
-        preview.style.display = 'block';
+        document.getElementById('previewImg').src = currentImageData;
+        document.getElementById('imagePreview').style.display = 'block';
       };
       reader.readAsDataURL(file);
     }
@@ -532,14 +385,9 @@
     document.getElementById('adminPassword').value = '';
     document.getElementById('passwordError').style.display = 'none';
   }
-  
-  function closePasswordModal() {
-    document.getElementById('passwordModal').classList.remove('show');
-  }
-  
+  function closePasswordModal() { document.getElementById('passwordModal').classList.remove('show'); }
   function checkPasswordAndOpen() {
-    const password = document.getElementById('adminPassword').value;
-    if (password === ADMIN_PASSWORD) {
+    if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
       isAdminLoggedIn = true;
       closePasswordModal();
       document.getElementById('adminPanel').classList.add('show');
@@ -548,21 +396,14 @@
       document.getElementById('passwordError').style.display = 'block';
     }
   }
-  
-  function closeAdminPanel() {
-    document.getElementById('adminPanel').classList.remove('show');
-    isAdminLoggedIn = false;
-  }
-
+  function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('show'); isAdminLoggedIn = false; }
   function showAdminMessage(msg, isError = false) {
     const msgDiv = document.getElementById('adminSuccessMsg');
     msgDiv.textContent = msg;
     msgDiv.style.display = 'block';
     msgDiv.style.background = isError ? 'rgba(200,50,50,0.2)' : 'rgba(76,175,80,0.2)';
-    msgDiv.style.borderColor = isError ? '#f44336' : '#4caf50';
     setTimeout(() => msgDiv.style.display = 'none', 3000);
   }
-
   function filterPortfolio(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -570,11 +411,8 @@
       card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
     });
   }
+  document.getElementById('adminPassword')?.addEventListener('keypress', e => { if(e.key === 'Enter') checkPasswordAndOpen(); });
   
-  document.getElementById('adminPassword')?.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') checkPasswordAndOpen();
-  });
-
   renderPortfolioGrid();
 </script>
 </body>
