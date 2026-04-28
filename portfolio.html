@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Portfolio — Nexavo Software House</title>
   <link rel="stylesheet" href="style.css"/>
   <style>
@@ -31,8 +32,8 @@
     .pc-tags { display:flex; flex-wrap:wrap; gap:6px; }
     .pc-tag { padding:3px 10px; background:rgba(201,168,76,0.07); border:1px solid var(--border); border-radius:3px; font-size:0.7rem; color:var(--white-muted); font-family:'Space Mono',monospace; }
     
-    /* Admin link button */
-    .admin-link {
+    /* Admin Panel Styles */
+    .admin-toggle {
       position: fixed;
       bottom: 30px;
       right: 30px;
@@ -40,16 +41,69 @@
       color: #0A1628;
       padding: 12px 20px;
       border-radius: 40px;
-      text-decoration: none;
+      border: none;
       font-weight: bold;
       font-family: 'Space Mono', monospace;
+      cursor: pointer;
       z-index: 100;
       box-shadow: 0 0 15px rgba(201,168,76,0.5);
-      transition: all 0.3s;
     }
-    .admin-link:hover {
-      transform: scale(1.05);
-      background: #e0c87a;
+    .admin-toggle:hover { transform: scale(1.05); background: #e0c87a; }
+    
+    .admin-panel {
+      display: none;
+      background: rgba(10, 22, 40, 0.97);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--gold);
+      border-radius: 28px;
+      margin: 40px auto;
+      max-width: 1100px;
+      padding: 28px 30px;
+      z-index: 200;
+      position: relative;
+    }
+    .admin-panel.show { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .form-row { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 25px; }
+    .input-group { flex: 1; min-width: 180px; }
+    .input-group label {
+      display: block; font-size: 0.7rem; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 6px; font-family: 'Space Mono', monospace;
+    }
+    .input-group input, .input-group select, .input-group textarea {
+      width: 100%; background: #0A1628; border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 14px; color: white;
+    }
+    .btn-admin {
+      background: transparent; border: 1px solid var(--gold); color: var(--gold);
+      padding: 10px 24px; border-radius: 40px; cursor: pointer; font-family: 'Space Mono', monospace;
+    }
+    .btn-admin:hover { background: var(--gold); color: #0A1628; }
+    .project-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(15,31,46,0.7); border-radius: 16px; padding: 12px 18px;
+      margin-bottom: 12px;
+    }
+    .delete-project-btn {
+      background: rgba(200,50,50,0.8); border: none; color: white;
+      padding: 5px 15px; border-radius: 20px; cursor: pointer;
+    }
+    .delete-project-btn:hover { background: red; }
+    .success-msg {
+      background: rgba(76,175,80,0.2); border: 1px solid #4caf50;
+      padding: 10px; border-radius: 8px; margin-bottom: 15px;
+      color: #4caf50; display: none;
+    }
+    .close-panel-btn {
+      float: right;
+      background: transparent;
+      border: none;
+      color: var(--gold);
+      font-size: 24px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -79,6 +133,35 @@
   </div>
 </div>
 
+<!-- Hidden Admin Panel -->
+<div class="admin-panel" id="adminPanel">
+  <button class="close-panel-btn" onclick="toggleAdminPanel()">✕</button>
+  <h3 style="color:var(--gold); margin-bottom: 20px;">⚡ Portfolio Manager</h3>
+  <div id="adminSuccessMsg" class="success-msg"></div>
+  <div class="form-row">
+    <div class="input-group"><label>Project Title</label><input type="text" id="title" placeholder="e.g., Amazing Website"></div>
+    <div class="input-group"><label>Category</label>
+      <select id="category"><option value="web">Web Dev</option><option value="erp">ERP</option><option value="design">Design</option><option value="ecommerce">E-Commerce</option><option value="app">Apps</option></select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="input-group"><label>Description</label><textarea id="description" rows="2" placeholder="Describe the project..."></textarea></div>
+  </div>
+  <div class="form-row">
+    <div class="input-group"><label>Technologies (comma separated)</label><input type="text" id="tags" placeholder="React, Node.js"></div>
+    <div class="input-group"><label>Emoji Icon</label><input type="text" id="emoji" placeholder="🚀" value="🚀"></div>
+  </div>
+  <button class="btn-admin" onclick="addProject()">➕ Add Project</button>
+  <button class="btn-admin" onclick="resetToDefault()" style="margin-left:10px;">⟳ Reset to Default</button>
+  
+  <div style="margin-top: 30px;">
+    <h4 style="color:var(--gold); margin-bottom: 15px;">📋 Your Projects</h4>
+    <div id="projectsList"></div>
+  </div>
+</div>
+
+<button class="admin-toggle" onclick="toggleAdminPanel()">🔐 Admin Panel</button>
+
 <section>
   <div class="portfolio-filters reveal">
     <button class="filter-btn active" onclick="filterPortfolio('all',this)">All Projects</button>
@@ -88,10 +171,7 @@
     <button class="filter-btn" onclick="filterPortfolio('ecommerce',this)">E-Commerce</button>
     <button class="filter-btn" onclick="filterPortfolio('app',this)">Apps</button>
   </div>
-
-  <div class="portfolio-grid" id="portfolio-grid">
-    <!-- Projects load dynamically from localStorage (same as panel.html) -->
-  </div>
+  <div class="portfolio-grid" id="portfolio-grid"></div>
 </section>
 
 <div class="divider"></div>
@@ -111,115 +191,131 @@
   <div class="footer-bottom"><p>© 2026 Nexavo Software House. All rights reserved.</p><p style="color:var(--gold);font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:2px;">PREMIUM DIGITAL SOLUTIONS</p></div>
 </footer>
 
-<!-- Admin Panel Link -->
-<a href="panel.html" class="admin-link">🔐 Admin Panel</a>
-
 <script src="main.js"></script>
 <script>
-  // Same STORAGE_KEY as panel.html
   const STORAGE_KEY = 'nexavo_portfolio_projects';
-
-  // Default projects (same as panel.html)
+  
   const DEFAULT_PROJECTS = [
     { title: "Corporate Website — TechCorp", category: "web", desc: "Full corporate website with CMS, SEO, multi-language.", tags: ["HTML","CSS","JS","PHP"], emoji: "🌐" },
     { title: "ERPNext Full Setup — Manufacturing Co.", category: "erp", desc: "Complete ERPNext implementation with custom modules.", tags: ["ERPNext","Frappe","Python"], emoji: "⚙️" },
-    { title: "Online Store — FashionHub", category: "ecommerce", desc: "Full e-commerce platform with payment integration.", tags: ["WooCommerce","WordPress","Payment API"], emoji: "🛒" },
-    { title: "Brand Identity — StartupX", category: "design", desc: "Complete brand identity including logo, color palette.", tags: ["Logo","Illustrator","Brand Kit"], emoji: "🎨" },
-    { title: "Inventory Manager App", category: "app", desc: "Cross-platform inventory management app.", tags: ["React","Node.js","MySQL"], emoji: "📱" },
-    { title: "Portfolio Website — Agency", category: "web", desc: "Animated portfolio website with custom animations.", tags: ["HTML","GSAP","JS"], emoji: "💼" },
-    { title: "Custom ERP Fields — Retail Chain", category: "erp", desc: "Custom DocTypes and automated reports.", tags: ["ERPNext","Custom Fields"], emoji: "📊" },
-    { title: "Linux Server Migration", category: "web", desc: "Server migration with security hardening.", tags: ["Ubuntu","Nginx","SSL"], emoji: "🐧" }
+    { title: "Online Store — FashionHub", category: "ecommerce", desc: "Full e-commerce platform with payment integration.", tags: ["WooCommerce","WordPress"], emoji: "🛒" },
+    { title: "Brand Identity — StartupX", category: "design", desc: "Complete brand identity including logo, color palette.", tags: ["Logo","Illustrator"], emoji: "🎨" },
+    { title: "Inventory Manager App", category: "app", desc: "Cross-platform inventory management app.", tags: ["React","Node.js"], emoji: "📱" }
   ];
 
-  // Get projects from localStorage (same data as panel.html)
   function getProjects() {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && JSON.parse(stored).length > 0) {
-      return JSON.parse(stored);
-    }
-    // Initialize with defaults if nothing exists
+    if (stored && JSON.parse(stored).length > 0) return JSON.parse(stored);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
     return [...DEFAULT_PROJECTS];
   }
 
-  // Render the portfolio grid
+  function saveProjects(projects) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+    renderPortfolioGrid();
+    renderProjectsList();
+  }
+
   function renderPortfolioGrid() {
     const projects = getProjects();
     const grid = document.getElementById('portfolio-grid');
     if (!grid) return;
-    
     if (projects.length === 0) {
-      grid.innerHTML = '<div style="text-align:center; padding:60px; color:#888;">No projects yet. Go to Admin Panel to add your first project! 🚀</div>';
+      grid.innerHTML = '<div style="text-align:center; padding:60px; color:#888;">No projects yet. Click Admin Panel to add! 🚀</div>';
       return;
     }
-    
-    function getCatName(cat) {
-      const names = {
-        'web': 'Web Development',
-        'erp': 'ERP',
-        'design': 'Design',
-        'ecommerce': 'E-Commerce',
-        'app': 'App Development'
-      };
-      return names[cat] || cat;
-    }
-    
-    function escapeHtml(str) {
-      if (!str) return '';
-      return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-      });
-    }
-    
+    const catNames = {'web':'Web Development','erp':'ERP','design':'Design','ecommerce':'E-Commerce','app':'App Development'};
+    function escape(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
     grid.innerHTML = projects.map(proj => `
-      <div class="portfolio-card reveal" data-cat="${proj.category}">
-        <div class="pc-thumb" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(26,51,88,0.8)); font-size:3.8rem; display:flex; align-items:center; justify-content:center;">
-          ${proj.emoji || '📁'}
-        </div>
+      <div class="portfolio-card" data-cat="${proj.category}">
+        <div class="pc-thumb" style="font-size:3.8rem;">${proj.emoji || '📁'}</div>
         <div class="pc-body">
-          <div class="pc-type">${getCatName(proj.category)}</div>
-          <h3 class="pc-title">${escapeHtml(proj.title)}</h3>
-          <p class="pc-desc">${escapeHtml(proj.desc)}</p>
-          <div class="pc-tags">
-            ${(proj.tags || []).map(t => `<span class="pc-tag">${escapeHtml(t)}</span>`).join('')}
-          </div>
+          <div class="pc-type">${catNames[proj.category] || proj.category}</div>
+          <h3 class="pc-title">${escape(proj.title)}</h3>
+          <p class="pc-desc">${escape(proj.desc)}</p>
+          <div class="pc-tags">${(proj.tags || []).map(t => `<span class="pc-tag">${escape(t)}</span>`).join('')}</div>
         </div>
       </div>
     `).join('');
   }
 
-  // Filter function
+  function renderProjectsList() {
+    const projects = getProjects();
+    const container = document.getElementById('projectsList');
+    if (!container) return;
+    function escape(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    if (projects.length === 0) {
+      container.innerHTML = '<p style="color:#888;">No projects yet. Add one above!</p>';
+      return;
+    }
+    container.innerHTML = projects.map((proj, idx) => `
+      <div class="project-item">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:1.8rem;">${proj.emoji || '📁'}</span>
+          <div><strong style="color:white;">${escape(proj.title)}</strong><div style="font-size:0.7rem; color:var(--gold);">${proj.category}</div></div>
+        </div>
+        <button class="delete-project-btn" onclick="deleteProject(${idx})">✕ Delete</button>
+      </div>
+    `).join('');
+  }
+
+  function deleteProject(index) {
+    const projects = getProjects();
+    projects.splice(index, 1);
+    saveProjects(projects);
+    showAdminMessage('✅ Project deleted!');
+  }
+
+  function addProject() {
+    const title = document.getElementById('title').value.trim();
+    const category = document.getElementById('category').value;
+    const desc = document.getElementById('description').value.trim();
+    const tagsInput = document.getElementById('tags').value.trim();
+    const emoji = document.getElementById('emoji').value.trim() || '🚀';
+    if (!title || !desc) { showAdminMessage('❌ Fill title and description', true); return; }
+    const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : [];
+    const projects = getProjects();
+    projects.push({ title, category, desc, tags, emoji });
+    saveProjects(projects);
+    document.getElementById('title').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('tags').value = '';
+    showAdminMessage('✅ Project added!');
+  }
+
+  function resetToDefault() {
+    if (confirm('Reset all projects to defaults?')) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
+      renderPortfolioGrid();
+      renderProjectsList();
+      showAdminMessage('✅ Reset to defaults!');
+    }
+  }
+
+  function toggleAdminPanel() {
+    const panel = document.getElementById('adminPanel');
+    panel.classList.toggle('show');
+    if (panel.classList.contains('show')) renderProjectsList();
+  }
+
+  function showAdminMessage(msg, isError = false) {
+    const msgDiv = document.getElementById('adminSuccessMsg');
+    msgDiv.textContent = msg;
+    msgDiv.style.display = 'block';
+    msgDiv.style.background = isError ? 'rgba(200,50,50,0.2)' : 'rgba(76,175,80,0.2)';
+    msgDiv.style.borderColor = isError ? '#f44336' : '#4caf50';
+    setTimeout(() => msgDiv.style.display = 'none', 3000);
+  }
+
   function filterPortfolio(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.portfolio-card').forEach(card => {
-      if (cat === 'all' || card.dataset.cat === cat) {
-        card.style.display = 'block';
-        card.style.animation = 'fadeUp 0.4s ease forwards';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
     });
   }
 
-  // Listen for storage changes (when panel.html saves new data)
-  window.addEventListener('storage', function(e) {
-    if (e.key === STORAGE_KEY) {
-      console.log('Projects updated from admin panel, refreshing...');
-      renderPortfolioGrid();
-    }
-  });
-
-  // Initial render
   renderPortfolioGrid();
-  
-  // Also refresh every 2 seconds to catch any changes (backup)
-  setInterval(function() {
-    renderPortfolioGrid();
-  }, 2000);
 </script>
 </body>
 </html>
