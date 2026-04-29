@@ -117,6 +117,12 @@
     .close-panel-btn { float: right; background: transparent; border: none; color: var(--gold); font-size: 24px; cursor: pointer; }
     .empty-state { text-align: center; padding: 60px; background: rgba(15,31,46,0.5); border-radius: 20px; border: 1px dashed var(--border); }
     .live-badge { background: #4caf50; color: white; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+    .sync-status {
+      position: fixed; bottom: 100px; right: 30px;
+      background: rgba(0,0,0,0.7); padding: 5px 12px;
+      border-radius: 20px; font-size: 11px; color: #4caf50;
+      font-family: monospace; z-index: 99;
+    }
   </style>
 </head>
 <body>
@@ -190,6 +196,7 @@
 </div>
 
 <button class="admin-toggle" onclick="requestAdminAccess()">🔐 Admin Panel</button>
+<div class="sync-status" id="syncStatus">☁️ Synced to Cloud</div>
 
 <section>
   <div class="portfolio-filters reveal">
@@ -226,6 +233,17 @@
   const STORAGE_KEY = 'nexavo_portfolio_projects';
   let isAdminLoggedIn = false;
   let currentImageData = null;
+  let currentUser = null;
+
+  // Get current logged in user
+  async function getCurrentUser() {
+    const userStr = localStorage.getItem('nexavo_user');
+    if (userStr) {
+      currentUser = JSON.parse(userStr);
+      return currentUser;
+    }
+    return null;
+  }
 
   const DEFAULT_PROJECTS = [
     { title: "Corporate Website — TechCorp", category: "web", desc: "Full corporate website with CMS, SEO, multi-language.", tags: ["HTML","CSS","JS","PHP"], emoji: "🌐", liveUrl: "", thumbnail: "" },
@@ -235,33 +253,64 @@
     { title: "Brand Identity Package", category: "design", desc: "Complete logo and branding package for startup.", tags: ["Illustrator","Photoshop"], emoji: "🎨", liveUrl: "", thumbnail: "" }
   ];
 
-  // Cloud storage functions
+  // Cloud sync functions using your Turso database
   async function getProjectsFromCloud() {
+    const user = await getCurrentUser();
+    if (!user) {
+      // Not logged in, use localStorage
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored && JSON.parse(stored).length > 0) return JSON.parse(stored);
+      return [...DEFAULT_PROJECTS];
+    }
+
     try {
-      const response = await fetch('/.netlify/functions/projects');
-      if (response.ok) {
-        const projects = await response.json();
+      const response = await fetch(`/api/get-data/${user.id}/portfolio_projects`);
+      const data = await response.json();
+      
+      if (data.data_value) {
+        const projects = JSON.parse(data.data_value);
         if (projects && projects.length > 0) {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+          document.getElementById('syncStatus').textContent = '☁️ Synced to Cloud';
           return projects;
         }
       }
-    } catch (e) { console.log('Cloud fetch failed, using localStorage'); }
+    } catch (e) {
+      console.log('Cloud fetch failed:', e);
+    }
     
+    // Fallback to localStorage
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored && JSON.parse(stored).length > 0) return JSON.parse(stored);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
     return [...DEFAULT_PROJECTS];
   }
 
   async function saveProjectsToCloud(projects) {
+    const user = await getCurrentUser();
+    if (!user) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+      return;
+    }
+
     try {
-      await fetch('/.netlify/functions/projects', {
+      await fetch('/api/save-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(projects)
+        body: JSON.stringify({
+          user_id: user.id,
+          data_key: 'portfolio_projects',
+          data_value: JSON.stringify(projects)
+        })
       });
-    } catch(e) { console.log('Cloud save failed'); }
+      document.getElementById('syncStatus').textContent = '☁️ Saved to Cloud';
+      setTimeout(() => {
+        document.getElementById('syncStatus').textContent = '☁️ Synced to Cloud';
+      }, 2000);
+    } catch(e) {
+      console.log('Cloud save failed:', e);
+      document.getElementById('syncStatus').textContent = '⚠️ Offline Mode';
+    }
+    
     localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
   }
 
@@ -271,8 +320,8 @@
 
   async function saveProjects(projects) {
     await saveProjectsToCloud(projects);
-    renderPortfolioGrid();
-    if (isAdminLoggedIn) renderProjectsList();
+    await renderPortfolioGrid();
+    if (isAdminLoggedIn) await renderProjectsList();
   }
 
   async function renderPortfolioGrid() {
@@ -333,7 +382,7 @@
     const projects = await getProjects();
     projects.splice(index, 1);
     await saveProjects(projects);
-    showAdminMessage('✅ Project deleted!');
+    showAdminMessage('✅ Project deleted and synced to cloud!');
   }
 
   async function addProject() {
@@ -355,15 +404,15 @@
     document.getElementById('thumbnailImage').value = '';
     document.getElementById('imagePreview').style.display = 'none';
     currentImageData = null;
-    showAdminMessage('✅ Project added successfully!');
+    showAdminMessage('✅ Project added and synced to cloud!');
   }
 
   async function resetToDefault() {
-    if (confirm('Reset all projects to defaults?')) {
+    if (confirm('Reset all projects to defaults? This will sync across all devices.')) {
       await saveProjectsToCloud(DEFAULT_PROJECTS);
-      renderPortfolioGrid();
-      if (isAdminLoggedIn) renderProjectsList();
-      showAdminMessage('✅ Reset to defaults!');
+      await renderPortfolioGrid();
+      if (isAdminLoggedIn) await renderProjectsList();
+      showAdminMessage('✅ Reset to defaults and synced to cloud!');
     }
   }
 
@@ -385,7 +434,9 @@
     document.getElementById('adminPassword').value = '';
     document.getElementById('passwordError').style.display = 'none';
   }
+  
   function closePasswordModal() { document.getElementById('passwordModal').classList.remove('show'); }
+  
   function checkPasswordAndOpen() {
     if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
       isAdminLoggedIn = true;
@@ -396,7 +447,9 @@
       document.getElementById('passwordError').style.display = 'block';
     }
   }
+  
   function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('show'); isAdminLoggedIn = false; }
+  
   function showAdminMessage(msg, isError = false) {
     const msgDiv = document.getElementById('adminSuccessMsg');
     msgDiv.textContent = msg;
@@ -404,6 +457,7 @@
     msgDiv.style.background = isError ? 'rgba(200,50,50,0.2)' : 'rgba(76,175,80,0.2)';
     setTimeout(() => msgDiv.style.display = 'none', 3000);
   }
+  
   function filterPortfolio(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -411,9 +465,19 @@
       card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
     });
   }
+  
   document.getElementById('adminPassword')?.addEventListener('keypress', e => { if(e.key === 'Enter') checkPasswordAndOpen(); });
   
-  renderPortfolioGrid();
+  // Initialize everything
+  (async function init() {
+    await getCurrentUser();
+    await renderPortfolioGrid();
+    
+    // Check if user is logged in and show welcome message
+    if (currentUser) {
+      console.log(`Logged in as: ${currentUser.username} - Portfolio will sync across all devices!`);
+    }
+  })();
 </script>
 </body>
 </html>

@@ -1,6 +1,47 @@
 // ============================================================
-//  Nexavo — main.js (with Database Integration)
+//  Nexavo — main.js (with Cross-Device Sync)
 // ============================================================
+
+/* ── Check Login Status ───────────────────────────────────── */
+let currentUser = null;
+
+async function checkLogin() {
+    const userStr = localStorage.getItem('nexavo_user');
+    if (!userStr) {
+        // Not logged in, redirect to login page
+        if (!window.location.pathname.includes('login.html')) {
+            window.location.href = '/login.html';
+        }
+        return false;
+    }
+    
+    try {
+        currentUser = JSON.parse(userStr);
+        const response = await fetch('/api/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: currentUser.id })
+        });
+        
+        const data = await response.json();
+        if (!data.success) {
+            // Session expired
+            logout();
+            return false;
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Auth error:', error);
+        return false;
+    }
+}
+
+function logout() {
+    localStorage.removeItem('nexavo_user');
+    localStorage.removeItem('nexavo_logged_in');
+    window.location.href = '/login.html';
+}
 
 /* ── Particles Canvas ──────────────────────────────────────── */
 (function initParticles() {
@@ -69,6 +110,24 @@
       a.classList.add('active');
     }
   });
+  
+  // Add logout button to nav if logged in
+  if (currentUser) {
+    const navLinks = document.querySelector('.nav-links');
+    if (navLinks && !document.getElementById('logout-btn')) {
+      const logoutLi = document.createElement('li');
+      const logoutBtn = document.createElement('a');
+      logoutBtn.href = '#';
+      logoutBtn.textContent = 'Logout';
+      logoutBtn.id = 'logout-btn';
+      logoutBtn.onclick = (e) => {
+        e.preventDefault();
+        logout();
+      };
+      logoutLi.appendChild(logoutBtn);
+      navLinks.appendChild(logoutLi);
+    }
+  }
 })();
 
 /* ── Scroll Reveal ─────────────────────────────────────────── */
@@ -117,7 +176,7 @@
   });
 })();
 
-/* ── Contact Form Handler with Database ───────────────────── */
+/* ── Contact Form Handler with User ID ────────────────────── */
 (function initContactForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
@@ -128,7 +187,6 @@
     const btn = form.querySelector('button[type="submit"]');
     const orig = btn.innerHTML;
     
-    // Get form data - adjust selectors based on your form structure
     const nameInput = form.querySelector('#name, input[name="name"], input[placeholder*="Name"]');
     const emailInput = form.querySelector('#email, input[name="email"], input[placeholder*="Email"]');
     const messageInput = form.querySelector('#message, textarea[name="message"], textarea[placeholder*="Message"]');
@@ -137,24 +195,24 @@
     const email = emailInput?.value || '';
     const message = messageInput?.value || '';
     
-    // Validate
     if (!name || !email || !message) {
       showNotification('Please fill all fields', 'error');
       return;
     }
     
-    // Disable button and show loading
     btn.innerHTML = '⏳ Sending...';
     btn.disabled = true;
     
     try {
-      // Send to backend database
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, message })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          message,
+          userId: currentUser?.id 
+        })
       });
       
       const data = await response.json();
@@ -163,7 +221,7 @@
         btn.innerHTML = '✅ Message Sent!';
         btn.style.background = 'linear-gradient(135deg,#4caf50,#2e7d32)';
         form.reset();
-        showNotification('Your message has been saved to the database!', 'success');
+        showNotification('Your message has been saved!', 'success');
       } else {
         throw new Error(data.error || 'Failed to send');
       }
@@ -182,11 +240,9 @@
   });
   
   function showNotification(message, type) {
-    // Remove existing notification
     const oldNotif = document.querySelector('.nexavo-notification');
     if (oldNotif) oldNotif.remove();
     
-    // Create notification element
     const notification = document.createElement('div');
     notification.className = 'nexavo-notification';
     notification.textContent = message;
@@ -203,7 +259,6 @@
       ? 'linear-gradient(135deg,#4caf50,#2e7d32)'
       : 'linear-gradient(135deg,#ff4757,#c0392b)';
     notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
-    notification.style.animation = 'slideIn 0.3s ease';
     
     document.body.appendChild(notification);
     
@@ -215,101 +270,136 @@
   }
 })();
 
-/* ── Track Page Visits (Analytics) ───────────────────────── */
-(function trackVisits() {
+/* ── Cross-Device Data Sync Functions ─────────────────────── */
+async function syncDataToCloud(key, value) {
+  if (!currentUser) return;
+  
+  try {
+    await fetch('/api/save-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        user_id: currentUser.id, 
+        data_key: key, 
+        data_value: typeof value === 'object' ? JSON.stringify(value) : String(value) 
+      })
+    });
+  } catch (error) {
+    console.error('Failed to sync to cloud:', error);
+  }
+}
+
+async function loadDataFromCloud(key) {
+  if (!currentUser) return null;
+  
+  try {
+    const response = await fetch(`/api/get-data/${currentUser.id}/${key}`);
+    const data = await response.json();
+    if (data.data_value) {
+      try {
+        return JSON.parse(data.data_value);
+      } catch {
+        return data.data_value;
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to load from cloud:', error);
+    return null;
+  }
+}
+
+async function syncAllData() {
+  if (!currentUser) return;
+  
+  try {
+    const response = await fetch(`/api/get-all-data/${currentUser.id}`);
+    const cloudData = await response.json();
+    
+    // Apply all cloud data to localStorage
+    for (const [key, value] of Object.entries(cloudData)) {
+      localStorage.setItem(key, value);
+    }
+    
+    console.log('✅ Synced all data from cloud');
+  } catch (error) {
+    console.error('Failed to sync all data:', error);
+  }
+}
+
+// Replace localStorage.setItem with this
+window.setItemSync = async (key, value) => {
+  localStorage.setItem(key, value);
+  await syncDataToCloud(key, value);
+};
+
+// Replace localStorage.getItem with this (but also checks cloud)
+window.getItemSync = async (key) => {
+  // First check localStorage
+  let value = localStorage.getItem(key);
+  if (value !== null) return value;
+  
+  // If not in localStorage, check cloud
+  value = await loadDataFromCloud(key);
+  if (value !== null) {
+    localStorage.setItem(key, value);
+  }
+  return value;
+};
+
+/* ── Initialize App and Sync Data ─────────────────────────── */
+(async function initApp() {
+  // Check login first
+  const loggedIn = await checkLogin();
+  if (!loggedIn) return;
+  
+  // Sync all cloud data to local
+  await syncAllData();
+  
+  // Track page visit
   fetch('/api/track-visit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       page: window.location.pathname,
-      referrer: document.referrer
+      referrer: document.referrer,
+      userId: currentUser?.id
     })
   }).catch(err => console.error('Analytics error:', err));
-})();
-
-/* ── Database User Data Functions (Replaces localStorage) ─── */
-(async function initUserData() {
-  // Generate or get user ID
-  let userId = localStorage.getItem('nexavo_user_id');
-  if (!userId) {
-    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('nexavo_user_id', userId);
-  }
   
-  // Save data to database (replaces localStorage.setItem)
-  window.saveToDatabase = async (key, value) => {
-    try {
-      const response = await fetch('/api/save-data', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          user_id: userId, 
-          data_key: key, 
-          data_value: typeof value === 'object' ? JSON.stringify(value) : String(value) 
-        })
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('Failed to save to database:', error);
-      return null;
-    }
-  };
-  
-  // Load data from database (replaces localStorage.getItem)
-  window.loadFromDatabase = async (key) => {
-    try {
-      const response = await fetch(`/api/get-data/${userId}/${key}`);
-      const data = await response.json();
-      if (data.data_value) {
-        // Try to parse JSON if it looks like JSON
-        try {
-          return JSON.parse(data.data_value);
-        } catch {
-          return data.data_value;
-        }
-      }
-      return null;
-    } catch (error) {
-      console.error('Failed to load from database:', error);
-      return null;
-    }
-  };
-  
-  // Example: Load and apply saved theme if exists
-  const savedTheme = await window.loadFromDatabase('theme');
-  if (savedTheme && savedTheme === 'dark') {
-    document.body.classList.add('dark-theme');
+  // Display welcome message
+  if (currentUser) {
+    console.log(`Welcome back, ${currentUser.username}!`);
+    // You can add a welcome message on the page
+    const welcomeEl = document.createElement('div');
+    welcomeEl.textContent = `Welcome, ${currentUser.username}! ✨`;
+    welcomeEl.style.position = 'fixed';
+    welcomeEl.style.top = '80px';
+    welcomeEl.style.right = '20px';
+    welcomeEl.style.background = 'rgba(0,0,0,0.8)';
+    welcomeEl.style.color = '#c9a84c';
+    welcomeEl.style.padding = '8px 16px';
+    welcomeEl.style.borderRadius = '20px';
+    welcomeEl.style.fontSize = '12px';
+    welcomeEl.style.zIndex = '9999';
+    document.body.appendChild(welcomeEl);
+    
+    setTimeout(() => {
+      welcomeEl.style.opacity = '0';
+      setTimeout(() => welcomeEl.remove(), 1000);
+    }, 3000);
   }
 })();
 
-/* ── Utility: Save any localStorage data to database ──────── */
-// Use this function to migrate your existing localStorage data to database
-async function migrateLocalStorageToDatabase() {
-  const itemsToMigrate = ['userPreferences', 'cartItems', 'userSettings', 'formData'];
-  
-  for (const key of itemsToMigrate) {
-    const localData = localStorage.getItem(key);
-    if (localData) {
-      await saveToDatabase(key, localData);
-      console.log(`Migrated ${key} to database`);
-    }
-  }
-}
-
-// Uncomment the line below to migrate your existing data
-// migrateLocalStorageToDatabase();
-
-/* ── Example: How to use the database functions ───────────── */
+/* ── Usage Examples ────────────────────────────────────────── */
 /*
-// SAVE data to database instead of localStorage:
-await saveToDatabase('userTheme', 'dark');
-await saveToDatabase('shoppingCart', { items: ['item1', 'item2'], total: 100 });
+// SAVE data (syncs across all devices automatically):
+await setItemSync('userTheme', 'dark');
+await setItemSync('cartItems', JSON.stringify(['item1', 'item2']));
 
-// LOAD data from database:
-const theme = await loadFromDatabase('userTheme');
-const cart = await loadFromDatabase('shoppingCart');
+// LOAD data:
+const theme = await getItemSync('userTheme');
+const cart = await getItemSync('cartItems');
 
-// OLD way (localStorage) - replace with above:
-localStorage.setItem('key', 'value');     // OLD - DON'T USE
-const value = localStorage.getItem('key'); // OLD - DON'T USE
+// Now when you login on any device, your data will be there!
 */

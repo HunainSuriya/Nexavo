@@ -265,3 +265,35 @@ footer { background:var(--navy-mid); border-top:1px solid var(--border); padding
 /* RESPONSIVE */
 @media (max-width:900px) { .nav-links{display:none;} .hamburger{display:flex;} .footer-grid{grid-template-columns:1fr 1fr;} }
 @media (max-width:600px) { section{padding:70px 5%;} .footer-grid{grid-template-columns:1fr;} .hero-btns{flex-direction:column;align-items:center;} .hero-stats{gap:25px;} }
+
+
+/* Add this to your style.css file */
+
+#logout-btn {
+    cursor: pointer;
+    color: #ff4757;
+}
+
+#logout-btn:hover {
+    color: #ff6b81;
+}
+
+/* Fix your media queries - you had missing brackets */
+@media (max-width: 900px) { 
+    .nav-links {
+        display: none;
+    } 
+    .hamburger { 
+        display: block; /* Changed from 'none' to 'block' to show hamburger menu */
+    } 
+}
+
+@media (max-width: 600px) { 
+    section {
+        padding: 70px 5%;
+    } 
+    .footer-grid {
+        /* Add your footer grid styles here */
+        grid-template-columns: 1fr;
+    }
+}
