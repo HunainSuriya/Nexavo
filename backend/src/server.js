@@ -1,76 +1,66 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
-const env = require('./config/env');
-const Admin = require('./models/Admin');
-const errorHandler = require('./middleware/errorHandler');
+const dotenv = require('dotenv');
 
-// Import routes
-const authRoutes = require('./routes/auth');
-const projectRoutes = require('./routes/projects');
-const enquiryRoutes = require('./routes/enquiries');
+dotenv.config();
 
 const app = express();
-
-// Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-  console.log('✅ Uploads directory created');
-}
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Serve static files
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/enquiries', enquiryRoutes);
-
-// Health check endpoint
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Error handling middleware
-app.use(errorHandler);
+// Get projects
+app.get('/api/projects', (req, res) => {
+  res.json({
+    success: true,
+    projects: [
+      {
+        id: 1,
+        title: "ERPNext Implementation",
+        description: "Complete ERP solution for business automation",
+        category: "ERPNext",
+        image_url: "https://via.placeholder.com/400x300",
+        live_url: "#"
+      },
+      {
+        id: 2,
+        title: "Modern E-commerce Website",
+        description: "Full-stack e-commerce platform",
+        category: "Web Development",
+        image_url: "https://via.placeholder.com/400x300",
+        live_url: "#"
+      },
+      {
+        id: 3,
+        title: "Desktop POS System",
+        description: "Point of sale desktop application",
+        category: "Desktop App",
+        image_url: "https://via.placeholder.com/400x300",
+        live_url: "#"
+      }
+    ]
+  });
+});
+
+// Submit contact form
+app.post('/api/enquiries', (req, res) => {
+  const { client_name, email, project_type, message } = req.body;
+  console.log('New enquiry:', { client_name, email, project_type, message });
+  
+  res.json({
+    success: true,
+    message: 'Thank you! We will contact you soon.'
+  });
+});
 
 // Start server
-const startServer = async () => {
-  // Seed default admin
-  await Admin.seedDefaultAdmin();
-  
-  app.listen(env.port, () => {
-    console.log(`
-    ═══════════════════════════════════════════════
-    🚀 Nexavo Backend Server Running Successfully!
-    ═══════════════════════════════════════════════
-    📡 Port: ${env.port}
-    🌍 Environment: ${env.nodeEnv}
-    🔗 API URL: http://localhost:${env.port}/api
-    💾 Database: SQLite
-    📁 Uploads: ${uploadsDir}
-    ═══════════════════════════════════════════════
-    
-    Admin Login:
-    👤 Username: nexavo
-    🔑 Password: Nexavo@2024
-    
-    API Endpoints:
-    • POST /api/auth/login
-    • GET  /api/projects
-    • POST /api/projects (Admin)
-    • POST /api/enquiries
-    `);
-  });
-};
-
-startServer();
-
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
