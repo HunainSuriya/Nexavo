@@ -2,42 +2,35 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 
-// Basic routes
 app.get('/', (req, res) => {
-  res.json({ 
-    message: 'Nexavo API is running!',
-    status: 'active',
-    timestamp: new Date().toISOString()
-  });
+  res.json({ message: 'Nexavo Backend is running!' });
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'healthy' });
+  res.json({ status: 'OK' });
 });
 
 app.get('/api/projects', (req, res) => {
   res.json({ 
     success: true, 
     projects: [
-      {
-        id: 1,
-        title: "ERPNext Solution",
-        description: "Business automation",
-        category: "ERPNext"
-      }
+      { id: 1, title: "ERPNext Solutions", category: "ERPNext" },
+      { id: 2, title: "Web Development", category: "Web Development" }
     ] 
   });
 });
 
 app.post('/api/enquiries', (req, res) => {
-  res.json({ success: true, message: "Enquiry received" });
+  res.json({ success: true, message: "Message received!" });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+module.exports = app;
